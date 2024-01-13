@@ -1,0 +1,2 @@
+* Fix provision OS detection with debian (nodo1)
+* Fix provison in centos 7 and 8 (nodo 5,6)
