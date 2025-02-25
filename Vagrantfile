@@ -50,6 +50,16 @@ Vagrant.configure("2") do |config|
         apt-get install -y $packages
         aliasesfile=.bash_${aliasesfile}
       else
+        if [ "$ID_LIKE" == '"rhel fedora"' ] ; then
+          # detect if centos version is 7
+          # this is needed to update repo url's
+          export $(cat /etc/os-release  | grep -E '^VERSION_ID')
+          if [ "${VERSION_ID}" == '"7"' ] ; then
+             sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-*.repo
+             sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-*.repo
+             sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/CentOS-*.repo
+          fi
+        fi
         yum check-update
         yum install -y $packages
         dir=${dir}/.bashrc.d
