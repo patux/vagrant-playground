@@ -1,5 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+# Test line
 
 Vagrant.configure("2") do |config|
     config.vm.provider "virtualbox"
