@@ -40,16 +40,27 @@ Vagrant.configure("2") do |config|
       node6.vm.box = "centos/7"
       node6.vm.hostname = "node6"
     end
+    config.vm.define :node7 do |node7|
+      node7.vm.box = "generic/ubuntu1604"
+      node7.vm.hostname = "node7"
+    end
     config.vm.provision "shell", inline: <<-SHELL
       export "$(cat /etc/os-release  | grep -E '^ID_LIKE=' || echo ID_LIKE=debian)"
       dir=/home/vagrant
       aliasesfile=aliases
       packages="bat htop vim"
+      create_aliases() {
+         # echo "alias ls='exa -l'" > ${dir}/${aliasesfile}
+         echo "alias top='htop'" >> ${dir}/${aliasesfile}
+         echo "alias vi=vim" >> ${dir}/${aliasesfile}
+         [ "$ID_LIKE" == "debian" ] && bat=batcat || bat=bat
+         echo "alias cat='${bat}'" >> ${dir}/${aliasesfile}
+      }
       if [ "$ID_LIKE" == "debian" ] ; then
         export DEBIAN_FRONTEND=noninteractive
+        aliasesfile=.bash_${aliasesfile}
         apt-get update
         apt-get install -y $packages
-        aliasesfile=.bash_${aliasesfile}
       else
         if [ "$ID_LIKE" == '"rhel fedora"' ] ; then
           # detect if centos version is 7
@@ -63,14 +74,8 @@ Vagrant.configure("2") do |config|
         fi
         yum check-update
         yum install -y $packages
-        dir=${dir}/.bashrc.d
-        mkdir -p $dir
+        [ $? -eq 0 ] && { dir=${dir}/.bashrc.d; mkdir -p $dir; }
       fi
-      # echo "alias ls='exa -l'" > ${dir}/${aliasesfile}
-      echo "alias top='htop'" >> ${dir}/${aliasesfile}
-      echo "alias vi=vim" >> ${dir}/${aliasesfile}
-      [ "$ID_LIKE" == "debian" ] && bat=batcat || bat=bat
-       echo "alias cat='${bat}'" >> ${dir}/${aliasesfile}
-       chown -R vagrant:vagrant ${dir}
+      [ $? -eq 0 ] && { create_aliases; chown -R vagrant:vagrant ${dir}; }
     SHELL
 end
