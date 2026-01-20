@@ -16,33 +16,37 @@ Vagrant.configure("2") do |config|
       libvirt.cpus = 2
     end if Vagrant.has_plugin?('vagrant-libvirt')
 
-    config.vm.define :node1 do |node1|
-      node1.vm.box = "debian/bullseye64"
-      node1.vm.hostname = "node1"
+    config.vm.define :bullseye64 do |bullseye64|
+      bullseye64.vm.box = "debian/bullseye64"
+      bullseye64.vm.hostname = "bullseye64"
     end
-    config.vm.define :node2 do |node2|
-      node2.vm.box = "generic/ubuntu2010"
-      node2.vm.hostname = "node2"
+    config.vm.define :ubuntu2010 do |ubuntu2010|
+      ubuntu2010.vm.box = "generic/ubuntu2010"
+      ubuntu2010.vm.hostname = "ubuntu2010"
     end
-    config.vm.define :node3 do |node3|
-      node3.vm.box = "generic/ubuntu2204"
-      node3.vm.hostname = "node3"
+    config.vm.define :ubuntu2204 do |ubuntu2204|
+      ubuntu2204.vm.box = "generic/ubuntu2204"
+      ubuntu2204.vm.hostname = "ubuntu2204"
     end
-    config.vm.define :node4 do |node4|
-      node4.vm.box = "generic/rocky9"
-      node4.vm.hostname = "node4"
+    config.vm.define :rocky9 do |rocky9|
+      rocky9.vm.box = "generic/rocky9"
+      rocky9.vm.hostname = "rocky9"
     end
-    config.vm.define :node5 do |node5|
-      node5.vm.box = "generic/centos8"
-      node5.vm.hostname = "node5"
+    config.vm.define :centos8 do |centos8|
+      centos8.vm.box = "generic/centos8"
+      centos8.vm.hostname = "centos8"
     end
-    config.vm.define :node6 do |node6|
-      node6.vm.box = "centos/7"
-      node6.vm.hostname = "node6"
+    config.vm.define :centos7 do |centos7|
+      centos7.vm.box = "centos/7"
+      centos7.vm.hostname = "centos7"
     end
-    config.vm.define :node7 do |node7|
-      node7.vm.box = "generic/ubuntu1604"
-      node7.vm.hostname = "node7"
+    config.vm.define :ubuntu1604 do |ubuntu1604|
+      ubuntu1604.vm.box = "generic/ubuntu1604"
+      ubuntu1604.vm.hostname = "ubuntu1604"
+    end
+    config.vm.define :ubuntu2404 do |ubuntu2404|
+      ubuntu2404.vm.box = "cloud-image/ubuntu-24.04"
+      ubuntu2404.vm.hostname = "ubuntu2404"
     end
     config.vm.provision "shell", inline: <<-SHELL
       export "$(cat /etc/os-release  | grep -E '^ID_LIKE=' || echo ID_LIKE=debian)"
